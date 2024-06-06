@@ -49,7 +49,7 @@ function TaskColumn(props) {
   return (
     <>
       <div
-        className={`relative bg-slate-100 p-3 text-center rounded-lg border border-1 border-slate-400 w-1/2 h-full overflow-y-auto custom-scroll `}
+        className={`relative bg-slate-100 p-3 text-center rounded-lg border border-1 border-slate-400 shadow-neutral-500 drop-shadow-md  w-[22.2rem]  overflow-y-auto custom-scroll `}
       >
         <div className="flex justify-between mb-2 ">
           <p>{props.board?.title}</p>

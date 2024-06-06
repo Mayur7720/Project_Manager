@@ -98,7 +98,7 @@ function KanbanBoard() {
       <h1 className="text-slate-700 font-extrabold text-2xl text-center">
         Kanban Board
       </h1>
-      <section className="w-full h-full px-2 bg-red-800 pt-2 ">
+      <section className="w-full h-full px-2 bg-slate-100 my-3 pt-2 ">
         <div className="w-full h-full flex justify-center gap-8">
           {boards.map((item) => (
             <TaskColumn
@@ -112,7 +112,7 @@ function KanbanBoard() {
             />
           ))}
 
-          <div className="app_boards_board ">
+          <div className="app_boards_board">
             <Editable
               displayClass="app_boards_board_add"
               text="Add Board"

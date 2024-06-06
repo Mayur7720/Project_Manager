@@ -9,7 +9,8 @@
   cursor: default;
 }
 .editable_display:hover {
-  background-color: #ccc;
+  background-color: #cccc;
+  cursor: pointer;
 }
 .editable_edit {
   display: flex;

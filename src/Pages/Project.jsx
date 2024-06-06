@@ -11,39 +11,38 @@ function Project() {
   const [open, setOpen] = useState(false);
   const [actions, setActions] = useState(false);
   const [query, setQuery] = useState("");
-
-  const EnteredName = useRef();
-  const EnteredDescription = useRef();
-  const EnteredStartDate = useRef();
-  const EnteredEndDate = useRef();
-  const selectedBlock = useRef();
+  const [signalTask, setSignalTask] = useState({
+    taskName: "",
+    taskDescription: "",
+    taskStartDate: "",
+    taskEndDate: "",
+    taskSelectedBlock: "",
+  });
 
   const changeInput = (value) => {
     setQuery(value);
   };
 
+  const handleSingleChange = (e) => {
+    const { name, value } = e.target;
+    setSignalTask((prevState) => ({ ...prevState, [name]: value }));
+  };
+
   const handleAddTask = () => {
     const taskID = Date.now();
-    let taskName = EnteredName.current.value;
-    let taskDescription = EnteredDescription.current.value;
-    let taskStartDate = EnteredStartDate.current.value;
-    let taskEndDate = EnteredEndDate.current.value;
-    let taskSelectedBlock = selectedBlock.current.value;
-    const start_Date = new Date(`${taskStartDate}`);
-    const end_Date = new Date(`${taskEndDate}`);
+
+    const start_Date = new Date(`${signalTask.taskStartDate}`);
+    const end_Date = new Date(`${signalTask.taskEndDate}`);
     const date_Diff = start_Date.getTime() - end_Date.getTime();
     const remainingDays = Math.abs(Math.round(date_Diff / (1000 * 3600 * 24)));
     const newTask = {
+      ...signalTask,
       taskID,
-      taskName,
-      taskDescription,
-      taskEndDate,
-      taskStartDate,
-      taskSelectedBlock,
       remainingDays,
     };
 
     dispatch(addTask(newTask));
+
   };
   return (
     <section
@@ -87,14 +86,15 @@ function Project() {
               <div className="w-full p-4  ">
                 <p className="font-semibold ">Task Blocks</p>
                 <div className="flex items-center justify-between mt-3">
-                  <label htmlFor="taskBlock " className="mt-0">
+                  <label htmlFor="taskSelectedBlock " className="mt-0">
                     Block
                   </label>
                   <select
-                    ref={selectedBlock}
+                    onChange={handleSingleChange}
+                    value={signalTask.taskSelectedBlock}
                     className="p-1 w-3/4 outline-none ring-1 ring-transparent focus:border-transparent  focus:ring-blue-400 rounded-md border text-slate-400"
-                    name="taskBlock"
-                    id="taskBlock"
+                    name="taskSelectedBlock"
+                    id="taskSelectedBlock"
                   >
                     <option className="text-black bg-slate-100" value="select">
                       Select block
@@ -121,24 +121,26 @@ function Project() {
               <div className="p-4">
                 <p className="font-semibold">General Details</p>
                 <div className="flex items-center justify-between mt-3 ">
-                  <label htmlFor="name">Name</label>
+                  <label htmlFor="taskName">Name</label>
                   <input
-                    ref={EnteredName}
+                    onChange={handleSingleChange}
+                    value={signalTask.taskName}
                     type="text"
-                    name="name"
-                    id="name"
+                    name="taskName"
+                    id="taskName"
                     className="border p-1 w-3/4 outline-none ring-1 ring-transparent focus:border-transparent  focus:ring-blue-400 rounded-md  "
                     placeholder="Task name"
                   />
                 </div>
 
                 <div className=" flex items-center justify-between mt-3 ">
-                  <label htmlFor="description">Description</label>
+                  <label htmlFor="taskDescription">Description</label>
                   <textarea
-                    ref={EnteredDescription}
+                    value={signalTask.taskDescription}
+                    onChange={handleSingleChange}
                     type="text"
-                    name="description"
-                    id="description"
+                    name="taskDescription"
+                    id="taskDescription"
                     className="border p-2 w-3/4 outline-none ring-1 ring-transparent focus:border-transparent  focus:ring-blue-400 focus:blue rounded-md  "
                     placeholder="Task description"
                   />
@@ -149,32 +151,34 @@ function Project() {
                 <p className="font-semibold">Timeline</p>
                 <div className="flex items-center justify-between mt-3">
                   <label
-                    htmlFor="name"
+                    htmlFor="taskStartDate"
                     className="mt-2 text-gray-500 font-sans"
                   >
                     Start Date
                   </label>
                   <input
-                    ref={EnteredStartDate}
+                    value={signalTask.taskStartDate}
+                    onChange={handleSingleChange}
                     className="border ml-4 mt-4 bg-gray-200 w-3/4 p-1 text-gray-700 rounded-md outline-none ring-1 ring-transparent  focus:ring-blue-500"
                     type="date"
-                    name="name"
-                    id="name"
+                    name="taskStartDate"
+                    id="taskStartDate"
                   />
                 </div>
                 <div className="flex items-center justify-between mt-3">
                   <label
-                    htmlFor="name"
+                    htmlFor="taskEndDate"
                     className="mt-2 text-gray-500 font-sans"
                   >
                     Due Date
                   </label>
                   <input
-                    ref={EnteredEndDate}
+                    value={signalTask.taskEndDate}
+                    onChange={handleSingleChange}
                     className="border ml-4 mt-4 bg-gray-200 w-3/4 p-1  text-gray-700 rounded-md outline-none ring-1 ring-transparent  focus:ring-blue-500"
                     type="date"
-                    name="name"
-                    id="name"
+                    name="taskEndDate"
+                    id="taskEndDate"
                   />
                 </div>
               </div>
@@ -249,22 +253,24 @@ function Project() {
               <div className="px-4 pt-4 text-lg text-gray-700 font-semibold ">
                 {"Design"}
               </div>
-              {tasks.design.length>0?tasks.design
-                .filter((val) =>
-                  val.taskName.toLowerCase().includes(`${query}`)
-                )
-                .map((val) => (
-                  <Lists
-                    taskID={val.taskID}
-                    key={val.taskID}
-                    listName={val.taskName}
-                    Days={val.remainingDays}
-                    remainingTasks={val.remainingTask}
-                    totalTasks={val.totalTask}
-                    block="Design"
-                    actions={actions}
-                  />
-                )): (
+              {tasks.design.length > 0 ? (
+                tasks.design
+                  .filter((val) =>
+                    val.taskName.toLowerCase().includes(`${query}`)
+                  )
+                  .map((val) => (
+                    <Lists
+                      taskID={val.taskID}
+                      key={val.taskID}
+                      listName={val.taskName}
+                      Days={val.remainingDays}
+                      remainingTasks={val.remainingTask}
+                      totalTasks={val.totalTask}
+                      block="Design"
+                      actions={actions}
+                    />
+                  ))
+              ) : (
                 <div className=" py-6 rounded-lg bg-slate-200 text-center font-sans text-slate-400 font-semibold   ">
                   Empty
                 </div>

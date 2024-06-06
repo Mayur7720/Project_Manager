@@ -1,11 +1,10 @@
 import "./App.css";
-import LeftSideBar from "./Components/LeftSideBar";
-import RightSideBar from "./Pages/RightSideBar";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Project from "./Pages/Project";
 import KanbanBoard from "./Pages/KanbanBoard";
 import SingleTask from "./Pages/SingleTask";
 import RootLayout from "./Pages/RootLayout";
+import TeamOverview from "./Pages/TeamOverview";
 
 function App() {
   const router = createBrowserRouter([
@@ -13,7 +12,7 @@ function App() {
       path: "/",
       element: <RootLayout />,
       children: [
-        { index: true, element: <RightSideBar /> },
+        { index: true, element: <TeamOverview /> },
         { path: "project", element: <Project /> },
         { path: "kanban_board", element: <KanbanBoard /> },
         { path: "single_task", element: <SingleTask /> },

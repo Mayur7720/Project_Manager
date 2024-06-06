@@ -5,7 +5,7 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import Card from "../Components/Card";
 import Modal from "../Components/Modal";
 
-function RightSideBar() {
+function TeamOverview() {
   const projects = useSelector((state) => state.Project);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -55,7 +55,7 @@ function RightSideBar() {
       finalDays,
       selectedMembers,
     };
-    console.log(newProject);
+ 
     dispatch(addProject(newProject));
     setProjectData({
       projectID: "",
@@ -357,4 +357,4 @@ function RightSideBar() {
   );
 }
 
-export default RightSideBar;
+export default TeamOverview;

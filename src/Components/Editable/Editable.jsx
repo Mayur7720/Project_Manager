@@ -7,7 +7,8 @@ function Editable(props) {
   const [inputValue, setInputValue] = useState("");
   return (
     <div
-      className={`editable my-1 drop-shadow-md hover:border hover:border-black `}
+      className={`editable my-1 drop-shadow-md hover:border  mt-4 border border-transparent
+    border-1 hover:border-slate-50 rounded-lg overflow-hidden`}
     >
       {showEdit ? (
         <form
